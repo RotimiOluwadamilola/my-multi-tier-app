@@ -5,8 +5,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements ./requirements
+RUN pip install --no-cache-dir -r requirements/prod.txt
 
 # Copy application code
 COPY . .
@@ -15,5 +15,5 @@ COPY . .
 EXPOSE 8080
 
 # Run the app
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "conduit.app:app"]
 
