@@ -1,0 +1,20 @@
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/my-multi-tier-app-472308/my-multi-tier-repo/webapp:latest', '.']
+
+  # Push image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/my-multi-tier-app-472308/my-multi-tier-repo/webapp:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - webapp
+      - --image=us-central1-docker.pkg.dev/my-multi-tier-app-472308/my-multi-tier-repo/webapp:latest
+      - --region=us-central1
+      - --platform=managed
+      - --allow-unauthenticated
